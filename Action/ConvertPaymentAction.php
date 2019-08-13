@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Skeleton\Action;
+namespace PlumTreeSystems\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Exception\RequestNotSupportedException;

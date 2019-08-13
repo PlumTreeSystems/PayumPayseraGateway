@@ -1,13 +1,13 @@
 <?php
-namespace Payum\Skeleton;
+namespace PlumTreeSystems\Paysera;
 
-use Payum\Skeleton\Action\AuthorizeAction;
-use Payum\Skeleton\Action\CancelAction;
-use Payum\Skeleton\Action\ConvertPaymentAction;
-use Payum\Skeleton\Action\CaptureAction;
-use Payum\Skeleton\Action\NotifyAction;
-use Payum\Skeleton\Action\RefundAction;
-use Payum\Skeleton\Action\StatusAction;
+use PlumTreeSystems\Paysera\Action\AuthorizeAction;
+use PlumTreeSystems\Paysera\Action\CancelAction;
+use PlumTreeSystems\Paysera\Action\ConvertPaymentAction;
+use PlumTreeSystems\Paysera\Action\CaptureAction;
+use PlumTreeSystems\Paysera\Action\NotifyAction;
+use PlumTreeSystems\Paysera\Action\RefundAction;
+use PlumTreeSystems\Paysera\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
@@ -19,8 +19,8 @@ class SkeletonGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([
-            'payum.factory_name' => 'skeleton',
-            'payum.factory_title' => 'skeleton',
+            'payum.factory_name' => 'paysera',
+            'payum.factory_title' => 'paysera',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.authorize' => new AuthorizeAction(),
             'payum.action.refund' => new RefundAction(),

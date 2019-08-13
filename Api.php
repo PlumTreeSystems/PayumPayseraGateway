@@ -1,5 +1,5 @@
 <?php
-namespace Payum\Skeleton;
+namespace PlumTreeSystems\Paysera;
 
 use Http\Message\MessageFactory;
 use Payum\Core\Exception\Http\HttpException;
