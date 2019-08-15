@@ -2,8 +2,14 @@
 namespace PlumTreeSystems\Paysera;
 
 use Http\Message\MessageFactory;
+use function League\Uri\create;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\HttpClientInterface;
+use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\GetHttpRequest;
+use Symfony\Component\HttpFoundation\Request;
+use WebToPay;
 
 class Api
 {
@@ -36,11 +42,7 @@ class Api
         $this->messageFactory = $messageFactory;
     }
 
-    /**
-     * @param array $fields
-     *
-     * @return array
-     */
+
     protected function doRequest($method, array $fields)
     {
         $headers = [];
@@ -49,11 +51,32 @@ class Api
 
         $response = $this->client->send($request);
 
-        if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+        if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 200) {
             throw HttpException::factory($request, $response);
         }
 
         return $response;
+    }
+
+    public function doPayment(array $fields)
+    {
+        $fields['projectid'] = $this->options['project_id'];
+        $fields['sign_password'] = $this->options['password'];
+        $this->options['sandbox'] ? $fields['test'] = 1 : $fields['test'] = 0;
+        $authorizeTokenUrl = $this->getApiEndpoint();
+        $data = WebToPay::buildRequest($fields);
+        throw new HttpPostRedirect($authorizeTokenUrl, $data);
+    }
+
+    public function doNotify(array $fields)
+    {
+        $response = WebToPay::validateAndParseData(
+            $fields,
+            $this->options['project_id'],
+            $this->options['password']);
+        if ($response['status'] === '1') {
+            return true;
+        }
     }
 
     /**
@@ -61,6 +84,11 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return $this->options['sandbox'] ? 'http://sandbox.example.com' : 'http://example.com';
+        return $this->options['sandbox'] ? WebToPay::PAY_URL : WebToPay::PAY_URL;
+    }
+
+    public function getApiOptions()
+    {
+        return $this->options;
     }
 }

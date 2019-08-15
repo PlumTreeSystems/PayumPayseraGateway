@@ -1,15 +1,21 @@
 <?php
+
 namespace PlumTreeSystems\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 
-class ConvertPaymentAction implements ActionInterface
+class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareInterface
 {
-    use GatewayAwareTrait;
+
+    use GenericTokenFactoryAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -19,11 +25,36 @@ class ConvertPaymentAction implements ActionInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
+        /**
+         * @var $order PaymentInterface
+         */
+        $order = $request->getSource();
 
-        /** @var PaymentInterface $payment */
-        $payment = $request->getSource();
+        $details = ArrayObject::ensureArrayObject($order->getDetails());
 
-        throw new \LogicException('Not implemented');
+
+        $details['amount'] = $order->getTotalAmount();
+        $details['currency'] = $order->getCurrencyCode();
+        $details['orderid'] = $order->getNumber();
+        $details['description'] = $order->getDescription();
+        $details['p_email'] = $order->getClientEmail();
+        $details['personcode'] = $order->getClientId();
+        $details['customerIp'] = array_key_exists('REMOTE_ADDR', $_SERVER) ? $_SERVER['REMOTE_ADDR'] : null;
+
+        $token = $request->getToken();
+
+        $details['accepturl'] = $token->getTargetUrl();
+        $details['cancelurl'] = $token->getTargetUrl();
+
+        $notifyToken = $this->tokenFactory->createNotifyToken(
+            $request->getToken()->getGatewayName(),
+            $request->getToken()->getDetails()
+        );
+
+        $details['callbackurl'] = $notifyToken->getTargetUrl();
+
+        $request->setResult((array)$details);
+
     }
 
     /**
@@ -34,7 +65,6 @@ class ConvertPaymentAction implements ActionInterface
         return
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() == 'array'
-        ;
+            $request->getTo() == 'array';
     }
 }

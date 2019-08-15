@@ -8,13 +8,14 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Skeleton\Api;
 
-abstract class BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
+abstract class BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
-    use GatewayAwareTrait;
     use ApiAwareTrait;
 
     public function __construct()
     {
         $this->apiClass = Api::class;
     }
+
+
 }

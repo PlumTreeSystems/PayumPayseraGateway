@@ -2,19 +2,30 @@
 namespace PlumTreeSystems\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpResponse;
+use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use PlumTreeSystems\Paysera\Api;
 
-class NotifyAction implements ActionInterface
+class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
+    use ApiAwareTrait;
     use GatewayAwareTrait;
 
+    public function __construct()
+    {
+        $this->apiClass = Api::class;
+    }
+
     /**
-     * {@inheritDoc}
-     *
-     * @param Notify $request
+     * @param mixed $request
+     * @throws \WebToPayException
      */
     public function execute($request)
     {
@@ -22,7 +33,17 @@ class NotifyAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        throw new \LogicException('Not implemented');
+        $this->gateway->execute($httpRequest = new GetHttpRequest());
+
+        $model->replace($httpRequest->query);
+
+        if (true === $completed = $this->api->doNotify($httpRequest->query)) {
+            $model['status'] = 'COMPLETED';
+            throw new HttpResponse('OK');
+        } else {
+            throw new \WebToPayException('Payment was not successful');
+        }
+
     }
 
     /**

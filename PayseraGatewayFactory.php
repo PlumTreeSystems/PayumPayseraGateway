@@ -33,13 +33,13 @@ class PayseraGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'project_id' => '',
-                'password' => '',
+                'projectid' => '',
+                'sign_password' => '',
                 'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = [
-                'project_id', 'password'
+                'projectid', 'sign_password'
             ];
 
             $config['payum.api'] = function (ArrayObject $config) {
