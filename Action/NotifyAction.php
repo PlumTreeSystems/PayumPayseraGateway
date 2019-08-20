@@ -1,4 +1,5 @@
 <?php
+
 namespace PTS\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
@@ -36,8 +37,6 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        $model->replace($httpRequest->query);
-
         if ($completed = $this->api->doNotify($httpRequest->query)) {
             $model['status'] = 'COMPLETED';
             throw new HttpResponse('OK');
@@ -55,7 +54,6 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     {
         return
             $request instanceof Notify &&
-            $request->getModel() instanceof \ArrayAccess
-        ;
+            $request->getModel() instanceof \ArrayAccess;
     }
 }

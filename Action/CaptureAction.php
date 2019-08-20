@@ -11,6 +11,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\Notify;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PTS\Paysera\Api;
@@ -21,7 +22,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     use GatewayAwareTrait;
 
     use ApiAwareTrait;
-
 
     public function __construct()
     {
@@ -37,10 +37,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-
-        if (isset($model['error_code']) || $model['status'] === 'COMPLETED') {
-            return;
-        }
 
         $httpRequest = new GetHttpRequest();
 

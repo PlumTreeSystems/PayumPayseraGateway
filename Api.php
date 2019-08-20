@@ -45,8 +45,8 @@ class Api
     {
         $response = WebToPay::validateAndParseData(
             $fields,
-            $this->options['project_id'],
-            $this->options['password']);
+            $this->options['projectid'],
+            $this->options['sign_password']);
         if ($response['status'] === '1') {
             return true;
         } else {

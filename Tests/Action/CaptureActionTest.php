@@ -34,23 +34,6 @@ class CaptureActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldDoNothingIfPaymentHasErrorCode()
-    {
-        $model = [
-            'error_code' => '0',
-        ];
-        $gatewayMock = $this->createGatewayMock();
-        $gatewayMock
-            ->expects($this->never())
-            ->method('execute');
-        $action = new CaptureAction();
-        $action->setGateway($gatewayMock);
-        $action->execute(new Capture($model));
-    }
-
-    /**
-     * @test
-     */
     public function shouldCallDoPayment()
     {
         $apiMock = $this->createMock(Api::class);

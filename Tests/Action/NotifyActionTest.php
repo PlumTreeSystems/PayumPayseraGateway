@@ -3,9 +3,7 @@
 
 namespace PTS\Paysera\Tests\Action;
 
-
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\Model\ArrayObject;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use Payum\Core\Tests\GenericActionTest;
