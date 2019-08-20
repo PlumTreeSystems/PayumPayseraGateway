@@ -1,18 +1,18 @@
 {
-    "name": "plumtreesystems/paysera",
+    "name": "plumtreesystems/payum-paysera-gateway",
     "type": "library",
-    "description": "This is a Gateway being built to work with the Payum library",
-    "keywords": ["payment"],
-    "homepage": "https://payum.forma-pro.com",
+    "description": "This is a payum library used for paysera payments",
+    "keywords": ["payment", "paysera", "payum", "gateway"],
+    "homepage": "https://github.com/PlumTreeSystems/PayumPayseraGateway",
     "license": "MIT",
     "authors": [
         {
-            "name": "Kotlyar Maksim",
-            "email": "kotlyar.maksim@gmail.com"
-        },
-        {
             "name": "Mykolas Vitkus",
             "email": "mykolasvitkus@gmail.com"
+        },
+        {
+            "name": "Kotlyar Maksim",
+            "email": "kotlyar.maksim@gmail.com"
         },
         {
             "name":     "Payum project",
