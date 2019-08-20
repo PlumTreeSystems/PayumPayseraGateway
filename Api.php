@@ -1,8 +1,9 @@
 <?php
-namespace PlumTreeSystems\Paysera;
+namespace PTS\Paysera;
 
 use Http\Message\MessageFactory;
 use function League\Uri\create;
+use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\Http\HttpException;
 use Payum\Core\HttpClientInterface;
 use Payum\Core\Reply\HttpPostRedirect;
@@ -14,55 +15,27 @@ use WebToPay;
 class Api
 {
     /**
-     * @var HttpClientInterface
-     */
-    protected $client;
-
-    /**
-     * @var MessageFactory
-     */
-    protected $messageFactory;
-
-    /**
      * @var array
      */
     protected $options = [];
 
     /**
-     * @param array               $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory      $messageFactory
-     *
-     * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
+     * Api constructor.
+     * @param array $options
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
+    public function __construct(array $options)
     {
+        $options = ArrayObject::ensureArrayObject($options);
+        $options->defaults($this->options);
+
         $this->options = $options;
-        $this->client = $client;
-        $this->messageFactory = $messageFactory;
-    }
-
-
-    protected function doRequest($method, array $fields)
-    {
-        $headers = [];
-
-        $request = $this->messageFactory->createRequest($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
-
-        $response = $this->client->send($request);
-
-        if ($response->getStatusCode() >= 400 && $response->getStatusCode() < 200) {
-            throw HttpException::factory($request, $response);
-        }
-
-        return $response;
     }
 
     public function doPayment(array $fields)
     {
-        $fields['projectid'] = $this->options['project_id'];
-        $fields['sign_password'] = $this->options['password'];
-        $this->options['sandbox'] ? $fields['test'] = 1 : $fields['test'] = 0;
+        $fields['projectid'] = $this->options['projectid'];
+        $fields['sign_password'] = $this->options['sign_password'];
+        $this->options['test'] ? $fields['test'] = 1 : $fields['test'] = 0;
         $authorizeTokenUrl = $this->getApiEndpoint();
         $data = WebToPay::buildRequest($fields);
         throw new HttpPostRedirect($authorizeTokenUrl, $data);
@@ -76,6 +49,8 @@ class Api
             $this->options['password']);
         if ($response['status'] === '1') {
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -84,7 +59,7 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return $this->options['sandbox'] ? WebToPay::PAY_URL : WebToPay::PAY_URL;
+        return WebToPay::PAY_URL;
     }
 
     public function getApiOptions()

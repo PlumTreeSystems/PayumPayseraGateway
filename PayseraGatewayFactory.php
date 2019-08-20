@@ -1,14 +1,14 @@
 <?php
 
-namespace PlumTreeSystems\Paysera;
+namespace PTS\Paysera;
 
-use PlumTreeSystems\Paysera\Action\AuthorizeAction;
-use PlumTreeSystems\Paysera\Action\CancelAction;
-use PlumTreeSystems\Paysera\Action\ConvertPaymentAction;
-use PlumTreeSystems\Paysera\Action\CaptureAction;
-use PlumTreeSystems\Paysera\Action\NotifyAction;
-use PlumTreeSystems\Paysera\Action\RefundAction;
-use PlumTreeSystems\Paysera\Action\StatusAction;
+use PTS\Paysera\Action\AuthorizeAction;
+use PTS\Paysera\Action\CancelAction;
+use PTS\Paysera\Action\ConvertPaymentAction;
+use PTS\Paysera\Action\CaptureAction;
+use PTS\Paysera\Action\NotifyAction;
+use PTS\Paysera\Action\RefundAction;
+use PTS\Paysera\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 
@@ -35,7 +35,7 @@ class PayseraGatewayFactory extends GatewayFactory
             $config['payum.default_options'] = array(
                 'projectid' => '',
                 'sign_password' => '',
-                'sandbox' => true,
+                'test' => true,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = [

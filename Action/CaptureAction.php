@@ -1,6 +1,6 @@
 <?php
 
-namespace PlumTreeSystems\Paysera\Action;
+namespace PTS\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -13,16 +13,14 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
-use PlumTreeSystems\Paysera\Api;
+use PTS\Paysera\Api;
 use WebToPay;
 
-class CaptureAction implements ActionInterface, ApiAwareInterface, GenericTokenFactoryAwareInterface, GatewayAwareInterface
+class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
     use GatewayAwareTrait;
 
     use ApiAwareTrait;
-
-    use GenericTokenFactoryAwareTrait;
 
 
     public function __construct()
@@ -40,16 +38,18 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GenericTokenF
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if (isset($model['error_code']) || $model['status'] === 'COMPLETED') {
+            return;
+        }
+
         $httpRequest = new GetHttpRequest();
 
         $this->gateway->execute($httpRequest);
 
-        if (isset($httpRequest->query['error_code'])) {
-            $model->replace($httpRequest->query);
-        }
         if (isset($httpRequest->query['ss1']) && isset($httpRequest->query['ss2'])) {
             return;
         } else {
+            $model['status'] = 'NEW';
             $this->api->doPayment((array)$model);
         }
     }

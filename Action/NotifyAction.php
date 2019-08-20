@@ -1,5 +1,5 @@
 <?php
-namespace PlumTreeSystems\Paysera\Action;
+namespace PTS\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
@@ -11,11 +11,12 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
-use PlumTreeSystems\Paysera\Api;
+use PTS\Paysera\Api;
 
 class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
     use ApiAwareTrait;
+
     use GatewayAwareTrait;
 
     public function __construct()
@@ -37,10 +38,11 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $model->replace($httpRequest->query);
 
-        if (true === $completed = $this->api->doNotify($httpRequest->query)) {
+        if ($completed = $this->api->doNotify($httpRequest->query)) {
             $model['status'] = 'COMPLETED';
             throw new HttpResponse('OK');
         } else {
+            $model['status'] = 'REJECTED';
             throw new \WebToPayException('Payment was not successful');
         }
 

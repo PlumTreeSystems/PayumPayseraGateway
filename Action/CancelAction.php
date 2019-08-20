@@ -1,5 +1,5 @@
 <?php
-namespace PlumTreeSystems\Paysera\Action;
+namespace PTS\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;

@@ -1,12 +1,10 @@
 <?php
 
-namespace PlumTreeSystems\Paysera\Action;
+namespace PTS\Paysera\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
@@ -47,8 +45,8 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
         $details['cancelurl'] = $token->getTargetUrl();
 
         $notifyToken = $this->tokenFactory->createNotifyToken(
-            $request->getToken()->getGatewayName(),
-            $request->getToken()->getDetails()
+            $token->getGatewayName(),
+            $token->getDetails()
         );
 
         $details['callbackurl'] = $notifyToken->getTargetUrl();
