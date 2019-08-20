@@ -1,5 +1,5 @@
 {
-    "name": "pts/paysera",
+    "name": "plumtreesystems/paysera",
     "type": "library",
     "description": "This is a Gateway being built to work with the Payum library",
     "keywords": ["payment"],
