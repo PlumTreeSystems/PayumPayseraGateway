@@ -1,21 +1,15 @@
 <?php
 namespace PTS\Paysera;
 
-use Http\Message\MessageFactory;
 use function League\Uri\create;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Exception\Http\HttpException;
-use Payum\Core\HttpClientInterface;
 use Payum\Core\Reply\HttpPostRedirect;
-use Payum\Core\Reply\HttpResponse;
-use Payum\Core\Request\GetHttpRequest;
-use Symfony\Component\HttpFoundation\Request;
 use WebToPay;
 
 class Api
 {
     /**
-     * @var array
+     * @var mixed
      */
     protected $options = [];
 
@@ -27,7 +21,6 @@ class Api
     {
         $options = ArrayObject::ensureArrayObject($options);
         $options->defaults($this->options);
-
         $this->options = $options;
     }
 

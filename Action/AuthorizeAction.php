@@ -21,8 +21,6 @@ class AuthorizeAction implements ActionInterface, GatewayAwareInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
-
         throw new \LogicException('Not implemented');
     }
 

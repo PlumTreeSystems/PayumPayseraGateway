@@ -20,8 +20,6 @@ class RefundAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
-
         throw new \LogicException('Not implemented');
     }
 

@@ -37,7 +37,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        if ($completed = $this->api->doNotify($httpRequest->query)) {
+        if ($this->api->doNotify($httpRequest->query)) {
             $model['status'] = 'COMPLETED';
             throw new HttpResponse('OK');
         } else {
