@@ -13,6 +13,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use PTS\Paysera\Api;
+use PTS\Paysera\MockedApi;
 
 class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
@@ -20,9 +21,9 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
     use GatewayAwareTrait;
 
-    public function __construct()
+    public function __construct($mocked = false)
     {
-        $this->apiClass = Api::class;
+        $mocked ? $this->apiClass = MockedApi::class : $this->apiClass = Api::class;
     }
 
     /**

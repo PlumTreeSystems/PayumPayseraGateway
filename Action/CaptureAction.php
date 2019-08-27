@@ -15,6 +15,7 @@ use Payum\Core\Request\Notify;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PTS\Paysera\Api;
+use PTS\Paysera\MockedApi;
 use WebToPay;
 
 class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
@@ -23,9 +24,9 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
 
     use ApiAwareTrait;
 
-    public function __construct()
+    public function __construct($mocked = false)
     {
-        $this->apiClass = Api::class;
+        $mocked ? $this->apiClass = MockedApi::class : $this->apiClass = Api::class;
     }
 
     /**
