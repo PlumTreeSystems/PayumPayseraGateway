@@ -42,11 +42,11 @@ class StatusActionTest extends GenericActionTest
     public function shouldMarkAsPending()
     {
         $request = new GetHumanStatus(array(
-            'status' => 'PENDING'
+            'status' => 'FAILED'
         ));
         $action = new StatusAction();
         $action->execute($request);
-        $this->assertTrue($request->isPending(), 'Request should be marked as pending');
+        $this->assertTrue($request->isFailed(), 'Request should be marked as failed');
     }
 
     /**
