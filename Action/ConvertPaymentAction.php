@@ -5,13 +5,17 @@ namespace PTS\Paysera\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 
-class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareInterface
+class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareInterface, GatewayAwareInterface
 {
+
+    use GatewayAwareTrait;
 
     use GenericTokenFactoryAwareTrait;
 
@@ -42,7 +46,7 @@ class ConvertPaymentAction implements ActionInterface, GenericTokenFactoryAwareI
         $token = $request->getToken();
 
         $details['accepturl'] = $token->getTargetUrl();
-        $details['cancelurl'] = $token->getTargetUrl();
+        $details['cancelurl'] = $token->getTargetUrl() . '?cancel=true';
 
         $notifyToken = $this->tokenFactory->createNotifyToken(
             $token->getGatewayName(),

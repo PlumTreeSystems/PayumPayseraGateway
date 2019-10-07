@@ -20,23 +20,14 @@ class StatusAction implements ActionInterface
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if (null === $model['status'] || 'NEW' == $model['status']) {
+        if (null === $model['status'] || 'NEW' == $model['status'] || 'pending' == $model['status']) {
             $request->markNew();
-            return;
-        } elseif ($model['status'] == 'PENDING') {
-            $request->markPending();
             return;
         } elseif ($model['status'] == 'COMPLETED') {
             $request->markCaptured();
             return;
-        } elseif ($model['status'] == 'CANCELED') {
-            $request->markCanceled();
-            return;
-        } elseif ($model['status'] == 'REJECTED') {
+        } elseif ($model['status'] == 'FAILED') {
             $request->markFailed();
-            return;
-        } elseif ($model['status'] == 'REFUND_FINALIZED') {
-            $request->markRefunded();
             return;
         }
         $request->markUnknown();

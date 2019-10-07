@@ -10,10 +10,8 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\Notify;
-use Payum\Core\Security\GenericTokenFactoryAwareInterface;
-use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PTS\Paysera\Api;
 use PTS\Paysera\MockedApi;
 use WebToPay;
@@ -39,9 +37,18 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+        if ($model['status'] === 'COMPLETED') {
+            return;
+        }
+
         $httpRequest = new GetHttpRequest();
 
         $this->gateway->execute($httpRequest);
+
+        if (isset($httpRequest->query['cancel']) && $httpRequest->query['cancel']) {
+            $e = 5;
+            return;
+        }
 
         if (isset($httpRequest->query['ss1']) && isset($httpRequest->query['ss2'])) {
             return;

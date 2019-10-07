@@ -20,6 +20,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
+                <file>./MockedApi.php</file>
+                <file>./MockedPayseraGatewayFactory.php</file>
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>
             </exclude>

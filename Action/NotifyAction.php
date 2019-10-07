@@ -42,7 +42,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
             $model['status'] = 'COMPLETED';
             throw new HttpResponse('OK');
         } else {
-            $model['status'] = 'REJECTED';
+            $model['status'] = 'FAILED';
             throw new \WebToPayException('Payment was not successful');
         }
 
