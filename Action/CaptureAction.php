@@ -46,7 +46,6 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->query['cancel']) && $httpRequest->query['cancel']) {
-            $e = 5;
             return;
         }
 
