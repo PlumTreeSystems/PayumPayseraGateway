@@ -24,17 +24,17 @@ class StatusAction implements ActionInterface
             case null:
             case 'pending':
             case 'NEW':
-            $request->markNew();
-                break;
+                $request->markNew();
+                return;
             case 'COMPLETED':
                 $request->markCaptured();
-                break;
+                return;
             case 'FAILED':
                 $request->markFailed();
-                break;
+                return;
             case 'NOT_EXECUTED':
                 $request->markPending();
-                break;
+                return;
         }
         $request->markUnknown();
 
