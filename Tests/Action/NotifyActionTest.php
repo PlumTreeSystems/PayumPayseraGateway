@@ -29,8 +29,6 @@ class NotifyActionTest extends GenericActionTest
      */
     public function shouldThrowExceptionWithWrongParams()
     {
-        $this->expectException(\WebToPayException::class);
-
         $expectedModel = array('foo' => 'fooVal');
 
         $apiMock = $this->createMock(Api::class);

@@ -22,16 +22,19 @@ class StatusAction implements ActionInterface
 
         switch ($model['status']) {
             case null:
-            case 'NEW':
             case 'pending':
-                $request->markNew();
+            case 'NEW':
+            $request->markNew();
+                break;
             case 'COMPLETED':
                 $request->markCaptured();
+                break;
             case 'FAILED':
                 $request->markFailed();
+                break;
             case 'NOT_EXECUTED':
                 $request->markPending();
-
+                break;
         }
         $request->markUnknown();
 
