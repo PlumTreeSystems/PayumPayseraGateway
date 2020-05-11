@@ -36,15 +36,7 @@ class Api
 
     public function doNotify(array $fields)
     {
-        $response = WebToPay::validateAndParseData(
-            $fields,
-            $this->options['projectid'],
-            $this->options['sign_password']);
-        if ($response['status'] === '1') {
-            return true;
-        } else {
-            return false;
-        }
+        return WebToPay::validateAndParseData($fields, $this->options['projectid'], $this->options['sign_password']);
     }
 
     /**

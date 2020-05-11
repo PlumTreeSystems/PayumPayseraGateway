@@ -38,12 +38,16 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        if ($this->api->doNotify($httpRequest->query)) {
-            $model['status'] = 'COMPLETED';
-            throw new HttpResponse('OK');
-        } else {
-            $model['status'] = 'FAILED';
-            throw new \WebToPayException('Payment was not successful');
+        $response = $this->api->doNotify($httpRequest->query);
+
+        switch ($response['status']) {
+            case '0':
+                $model['status'] = 'FAILED';
+            case '1':
+                $model['status'] = 'COMPLETED';
+                throw new HttpResponse('OK');
+            case '2':
+                $model['status'] = 'NOT_EXECUTED';
         }
 
     }
