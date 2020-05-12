@@ -46,13 +46,12 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
                 break;
             case '1':
                 $model['status'] = 'COMPLETED';
-                throw new HttpResponse('OK');
                 break;
             case '2':
                 $model['status'] = 'NOT_EXECUTED';
                 break;
         }
-
+        throw new HttpResponse('OK');
     }
 
     /**
