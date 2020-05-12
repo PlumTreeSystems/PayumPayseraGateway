@@ -40,6 +40,10 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $response = $this->api->doNotify($httpRequest->query);
 
+        if (!$response) {
+            throw new \WebToPayException('Wrong parameters');
+        }
+
         switch ($response['status']) {
             case '0':
                 $model['status'] = 'FAILED';
