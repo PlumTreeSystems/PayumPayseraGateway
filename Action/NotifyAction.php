@@ -38,7 +38,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
 
         $this->gateway->execute($httpRequest = new GetHttpRequest());
 
-        $response = $this->api->doNotify($httpRequest->query);
+        $response = $this->api->doNotify($httpRequest->method === 'POST' ? $httpRequest->request : $httpRequest->query);
 
         if (!$response) {
             throw new \WebToPayException('Wrong parameters');
